@@ -1,0 +1,269 @@
+indicators:
+  # ── Macro & Labor (FRED) ──────────────────────────────────────────
+  - id: gdp_growth
+    name: Real GDP Growth (Annualized)
+    category: macro_labor
+    source: fred
+    frequency: quarterly
+    code: A191RL1Q225SBEA
+    unit: percent
+
+  - id: cpi_yoy
+    name: CPI All Items
+    category: macro_labor
+    source: fred
+    frequency: monthly
+    code: CPIAUCSL
+    unit: index
+
+  - id: core_pce
+    name: Core PCE Price Index
+    category: macro_labor
+    source: fred
+    frequency: monthly
+    code: PCEPILFE
+    unit: index
+
+  - id: unemployment_rate
+    name: Unemployment Rate
+    category: macro_labor
+    source: fred
+    frequency: monthly
+    code: UNRATE
+    unit: percent
+
+  - id: nonfarm_payrolls
+    name: Total Non-Farm Payrolls
+    category: macro_labor
+    source: fred
+    frequency: monthly
+    code: PAYEMS
+    unit: thousands
+
+  - id: housing_starts
+    name: Housing Starts
+    category: macro_labor
+    source: fred
+    frequency: monthly
+    code: HOUST
+    unit: thousands
+
+  - id: initial_claims
+    name: Initial Jobless Claims
+    category: macro_labor
+    source: fred
+    frequency: weekly
+    code: ICSA
+    unit: number
+
+  # ── Rates & Credit (FRED) ────────────────────────────────────────
+  - id: fed_funds_rate
+    name: Effective Federal Funds Rate
+    category: rates_credit
+    source: fred
+    frequency: monthly
+    code: FEDFUNDS
+    unit: percent
+
+  - id: treasury_2y
+    name: 2-Year Treasury Yield
+    category: rates_credit
+    source: fred
+    frequency: daily
+    code: DGS2
+    unit: percent
+
+  - id: treasury_5y
+    name: 5-Year Treasury Yield
+    category: rates_credit
+    source: fred
+    frequency: daily
+    code: DGS5
+    unit: percent
+
+  - id: treasury_10y
+    name: 10-Year Treasury Yield
+    category: rates_credit
+    source: fred
+    frequency: daily
+    code: DGS10
+    unit: percent
+
+  - id: treasury_30y
+    name: 30-Year Treasury Yield
+    category: rates_credit
+    source: fred
+    frequency: daily
+    code: DGS30
+    unit: percent
+
+  - id: spread_10y_2y
+    name: 10Y-2Y Treasury Yield Spread
+    category: rates_credit
+    source: fred
+    frequency: daily
+    code: T10Y2Y
+    unit: percent
+
+  - id: spread_10y_3m
+    name: 10Y-3M Treasury Yield Spread
+    category: rates_credit
+    source: fred
+    frequency: daily
+    code: T10Y3M
+    unit: percent
+
+  - id: baa_spread
+    name: BAA Corporate Bond Spread
+    category: rates_credit
+    source: fred
+    frequency: daily
+    code: BAA10Y
+    unit: percent
+
+  # ── Markets & Commodities (YFinance) ─────────────────────────────
+  - id: sp500
+    name: S&P 500 ETF (SPY)
+    category: markets_commodities
+    source: yfinance
+    frequency: daily
+    code: SPY
+    unit: usd
+
+  - id: nasdaq100
+    name: Nasdaq 100 ETF (QQQ)
+    category: markets_commodities
+    source: yfinance
+    frequency: daily
+    code: QQQ
+    unit: usd
+
+  - id: russell2000
+    name: Russell 2000 ETF (IWM)
+    category: markets_commodities
+    source: yfinance
+    frequency: daily
+    code: IWM
+    unit: usd
+
+  - id: vix
+    name: CBOE Volatility Index
+    category: markets_commodities
+    source: yfinance
+    frequency: daily
+    code: "^VIX"
+    unit: index
+
+  - id: crude_oil
+    name: WTI Crude Oil Futures
+    category: markets_commodities
+    source: yfinance
+    frequency: daily
+    code: CL=F
+    unit: usd
+
+  - id: gold
+    name: Gold Futures
+    category: markets_commodities
+    source: yfinance
+    frequency: daily
+    code: GC=F
+    unit: usd
+
+  - id: dxy
+    name: US Dollar Index
+    category: markets_commodities
+    source: yfinance
+    frequency: daily
+    code: DX-Y.NYB
+    unit: index
+
+  - id: btc
+    name: Bitcoin
+    category: markets_commodities
+    source: yfinance
+    frequency: daily
+    code: BTC-USD
+    unit: usd
+
+  - id: eth
+    name: Ethereum
+    category: markets_commodities
+    source: yfinance
+    frequency: daily
+    code: ETH-USD
+    unit: usd
+
+  - id: hy_bond
+    name: High Yield Corporate Bond ETF
+    category: markets_commodities
+    source: yfinance
+    frequency: daily
+    code: HYG
+    unit: usd
+
+  # ── Equities / Fundamentals (YFinance) ───────────────────────────
+  - id: aapl
+    name: Apple Inc.
+    category: equities
+    source: yfinance
+    frequency: daily
+    code: AAPL
+    unit: usd
+
+  - id: msft
+    name: Microsoft Corp.
+    category: equities
+    source: yfinance
+    frequency: daily
+    code: MSFT
+    unit: usd
+
+  - id: googl
+    name: Alphabet Inc.
+    category: equities
+    source: yfinance
+    frequency: daily
+    code: GOOGL
+    unit: usd
+
+  - id: amzn
+    name: Amazon.com Inc.
+    category: equities
+    source: yfinance
+    frequency: daily
+    code: AMZN
+    unit: usd
+
+  - id: nvda
+    name: NVIDIA Corp.
+    category: equities
+    source: yfinance
+    frequency: daily
+    code: NVDA
+    unit: usd
+
+  - id: meta
+    name: Meta Platforms Inc.
+    category: equities
+    source: yfinance
+    frequency: daily
+    code: META
+    unit: usd
+
+  # ── Derivatives / Positioning (Placeholder) ──────────────────────
+  - id: spx_options_volume
+    name: SPX Options Volume
+    category: derivatives
+    source: placeholder
+    frequency: daily
+    code: SPX_OPT_VOL
+    unit: contracts
+
+  - id: vix_term_structure
+    name: VIX Term Structure
+    category: derivatives
+    source: placeholder
+    frequency: daily
+    code: VIX_TERM
+    unit: index

@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "us-macrofinance-tracker"
+version = "0.1.0"
+description = "Production-ready US macroeconomic and financial indicator tracker"
+requires-python = ">=3.10"
+dependencies = [
+    "fredapi>=0.5.2",
+    "yfinance>=0.2.31",
+    "pandas>=2.1.0",
+    "pydantic>=2.5.0",
+    "pyyaml>=6.0",
+    "fastapi>=0.104.0",
+    "uvicorn>=0.24.0",
+    "httpx>=0.25.0",
+    "streamlit>=1.28.0",
+    "plotly>=5.18.0",
+    "python-dotenv>=1.0.0",
+    "tenacity>=8.2.0",
+    "requests>=2.31.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "ruff>=0.1.0",
+]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
