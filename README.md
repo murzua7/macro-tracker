@@ -35,50 +35,6 @@ uvicorn macro_tracker.api.main:app --port 8080
 streamlit run src/macro_tracker/dashboard/app.py
 ```
 
----
-
-## Deployment Guide
-
-### Step 1: Enable Daily Automated Ingestion (GitHub Actions)
-
-The repo includes a GitHub Actions workflow that runs ingestion daily at 06:00 UTC and commits the updated database.
-
-1. Go to **https://github.com/murzua7/macro-tracker/settings/secrets/actions**
-2. Click **"New repository secret"**
-3. Set:
-   - **Name**: `FRED_API_KEY`
-   - **Secret**: your 32-character FRED API key (get one at https://fred.stlouisfed.org/docs/api/api_key.html)
-4. Click **"Add secret"**
-
-That's it. The workflow will:
-- Run automatically every day at 06:00 UTC
-- Fetch latest data from FRED and Yahoo Finance
-- Commit the updated `macro_data.db` to the repo
-- You can also trigger it manually: go to **Actions** tab > **"Daily Data Ingestion"** > **"Run workflow"**
-
-### Step 2: Deploy Dashboard on Streamlit Community Cloud (Free)
-
-Streamlit Community Cloud gives you a free, always-on public URL for the dashboard.
-
-1. Go to **https://share.streamlit.io** and sign in with your GitHub account
-2. Click **"New app"**
-3. Fill in the deployment form:
-   - **Repository**: `murzua7/macro-tracker`
-   - **Branch**: `main`
-   - **Main file path**: `src/macro_tracker/dashboard/app.py`
-4. Click **"Advanced settings"** (before deploying)
-5. In the **Secrets** text area, paste:
-   ```toml
-   FRED_API_KEY = "your-32-character-fred-api-key-here"
-   ```
-6. Click **"Deploy!"**
-
-The app will build and deploy in ~2 minutes. You'll get a public URL like `https://murzua7-macro-tracker-xxxxx.streamlit.app`.
-
-The dashboard auto-updates whenever GitHub Actions pushes new data to the repo.
-
----
-
 ## Indicator Categories
 
 | Category | Count | Source | Examples |
