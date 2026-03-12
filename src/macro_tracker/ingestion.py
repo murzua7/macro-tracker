@@ -5,7 +5,6 @@ from datetime import date
 
 from macro_tracker.connectors.base import BaseConnector
 from macro_tracker.connectors.fred import FredConnector
-from macro_tracker.connectors.placeholder import PlaceholderConnector
 from macro_tracker.connectors.yfinance_conn import YFinanceConnector
 from macro_tracker.db import Database
 from macro_tracker.registry import load_registry
@@ -14,11 +13,12 @@ logger = logging.getLogger(__name__)
 
 
 def _build_connectors() -> dict[str, BaseConnector]:
-    return {
-        "fred": FredConnector(),
-        "yfinance": YFinanceConnector(),
-        "placeholder": PlaceholderConnector(),
-    }
+    connectors: dict[str, BaseConnector] = {"yfinance": YFinanceConnector()}
+    try:
+        connectors["fred"] = FredConnector()
+    except ValueError:
+        logger.warning("FRED_API_KEY not set — skipping FRED indicators")
+    return connectors
 
 
 def ingest_all(

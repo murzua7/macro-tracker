@@ -15,7 +15,7 @@ def load_registry(path: Path | str | None = None) -> list[IndicatorSpec]:
         path = REGISTRY_PATH
 
     path = Path(path)
-    with open(path) as f:
+    with open(path, encoding="utf-8") as f:
         raw = yaml.safe_load(f)
 
     if not raw or "indicators" not in raw:

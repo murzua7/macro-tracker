@@ -20,11 +20,14 @@ class Frequency(str, Enum):
 
 
 class Category(str, Enum):
-    MACRO_LABOR = "macro_labor"
-    RATES_CREDIT = "rates_credit"
-    MARKETS_COMMODITIES = "markets_commodities"
-    EQUITIES = "equities"
-    DERIVATIVES = "derivatives"
+    MACRO_ACTIVITY = "macro_activity"
+    LABOR = "labor"
+    INFLATION_PRICES = "inflation_prices"
+    RATES_CURVE = "rates_curve"
+    CREDIT_CONDITIONS = "credit_conditions"
+    HOUSING = "housing"
+    LEADING_COMPOSITE = "leading_composite"
+    MARKETS = "markets"
 
 
 class IndicatorSpec(BaseModel):

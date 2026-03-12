@@ -70,8 +70,7 @@ def test_list_indicators(client):
     assert response.status_code == 200
     data = response.json()
     assert isinstance(data, list)
-    assert len(data) >= 30
-    # Check structure
+    assert len(data) >= 60
     first = data[0]
     assert "id" in first
     assert "name" in first
@@ -80,10 +79,10 @@ def test_list_indicators(client):
 
 
 def test_list_indicators_filter_category(client):
-    response = client.get("/indicators", params={"category": "macro_labor"})
+    response = client.get("/indicators", params={"category": "macro_activity"})
     assert response.status_code == 200
     data = response.json()
-    assert all(i["category"] == "macro_labor" for i in data)
+    assert all(i["category"] == "macro_activity" for i in data)
 
 
 def test_list_indicators_filter_source(client):
@@ -111,7 +110,6 @@ def test_get_snapshot(client):
     assert response.status_code == 200
     data = response.json()
     assert isinstance(data, list)
-    # Should have entries for indicators that have data
     ids = {e["indicator_id"] for e in data}
     assert "cpi_yoy" in ids
     assert "sp500" in ids
@@ -123,3 +121,24 @@ def test_get_freshness(client):
     data = response.json()
     assert isinstance(data, list)
     assert len(data) >= 2
+
+
+def test_analytics_summary(client):
+    response = client.get("/analytics/summary")
+    assert response.status_code == 200
+    data = response.json()
+    assert isinstance(data, list)
+
+
+def test_analytics_recession(client):
+    response = client.get("/analytics/recession")
+    assert response.status_code == 200
+    data = response.json()
+    assert "composite" in data
+
+
+def test_analytics_crosscorr(client):
+    response = client.get("/analytics/crosscorr", params={"ind1": "cpi_yoy", "ind2": "sp500"})
+    assert response.status_code == 200
+    data = response.json()
+    assert "classification" in data

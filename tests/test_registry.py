@@ -15,7 +15,7 @@ def test_load_registry_from_project():
     registry_path = Path(__file__).resolve().parent.parent / "registry.yaml"
     indicators = load_registry(registry_path)
 
-    assert len(indicators) >= 30, f"Expected at least 30 indicators, got {len(indicators)}"
+    assert len(indicators) >= 60, f"Expected at least 60 indicators, got {len(indicators)}"
 
     ids = [i.id for i in indicators]
     assert len(ids) == len(set(ids)), "Duplicate indicator IDs found"
@@ -30,24 +30,26 @@ def test_load_registry_from_project():
 
 
 def test_load_registry_categories():
-    """Ensure all 5 required categories are represented."""
+    """Ensure all 8 required categories are represented."""
     registry_path = Path(__file__).resolve().parent.parent / "registry.yaml"
     indicators = load_registry(registry_path)
 
     categories = {i.category.value for i in indicators}
-    expected = {"macro_labor", "rates_credit", "markets_commodities", "equities", "derivatives"}
+    expected = {
+        "macro_activity", "labor", "inflation_prices", "rates_curve",
+        "credit_conditions", "housing", "leading_composite", "markets",
+    }
     assert expected == categories, f"Missing categories: {expected - categories}"
 
 
 def test_load_registry_sources():
-    """Ensure all 3 sources are represented."""
+    """Ensure fred and yfinance sources are represented."""
     registry_path = Path(__file__).resolve().parent.parent / "registry.yaml"
     indicators = load_registry(registry_path)
 
     sources = {i.source.value for i in indicators}
     assert "fred" in sources
     assert "yfinance" in sources
-    assert "placeholder" in sources
 
 
 def test_load_registry_custom_file():
@@ -57,7 +59,7 @@ def test_load_registry_custom_file():
             {
                 "id": "test_ind",
                 "name": "Test Indicator",
-                "category": "macro_labor",
+                "category": "macro_activity",
                 "source": "fred",
                 "frequency": "monthly",
                 "code": "TEST123",
@@ -91,7 +93,7 @@ def test_load_registry_duplicate_ids():
             {
                 "id": "dup",
                 "name": "Dup 1",
-                "category": "macro_labor",
+                "category": "macro_activity",
                 "source": "fred",
                 "frequency": "monthly",
                 "code": "D1",
@@ -100,7 +102,7 @@ def test_load_registry_duplicate_ids():
             {
                 "id": "dup",
                 "name": "Dup 2",
-                "category": "macro_labor",
+                "category": "macro_activity",
                 "source": "fred",
                 "frequency": "monthly",
                 "code": "D2",

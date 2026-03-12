@@ -18,7 +18,7 @@ def test_indicator_spec_valid():
     spec = IndicatorSpec(
         id="test_indicator",
         name="Test Indicator",
-        category=Category.MACRO_LABOR,
+        category=Category.MACRO_ACTIVITY,
         source=Source.FRED,
         frequency=Frequency.MONTHLY,
         code="TEST123",
@@ -33,7 +33,7 @@ def test_indicator_spec_invalid_id():
         IndicatorSpec(
             id="Invalid-ID!",
             name="Bad",
-            category="macro_labor",
+            category="macro_activity",
             source="fred",
             frequency="monthly",
             code="X",
@@ -46,7 +46,7 @@ def test_indicator_spec_invalid_source():
         IndicatorSpec(
             id="test",
             name="Test",
-            category="macro_labor",
+            category="macro_activity",
             source="invalid_source",
             frequency="monthly",
             code="X",
@@ -78,10 +78,11 @@ def test_datapoint_requires_all_fields():
 
 
 def test_all_categories():
-    assert len(Category) == 5
+    assert len(Category) == 8
     values = {c.value for c in Category}
-    assert "macro_labor" in values
-    assert "derivatives" in values
+    assert "macro_activity" in values
+    assert "markets" in values
+    assert "credit_conditions" in values
 
 
 def test_all_frequencies():

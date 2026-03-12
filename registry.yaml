@@ -1,32 +1,61 @@
 indicators:
-  # ── Macro & Labor (FRED) ──────────────────────────────────────────
+  # ══════════════════════════════════════════════════════════════════════
+  # MACRO ACTIVITY — Real economy output and demand
+  # ══════════════════════════════════════════════════════════════════════
   - id: gdp_growth
     name: Real GDP Growth (Annualized)
-    category: macro_labor
+    category: macro_activity
     source: fred
     frequency: quarterly
     code: A191RL1Q225SBEA
     unit: percent
 
-  - id: cpi_yoy
-    name: CPI All Items
-    category: macro_labor
+  - id: industrial_production
+    name: Industrial Production Index
+    category: macro_activity
     source: fred
     frequency: monthly
-    code: CPIAUCSL
+    code: INDPRO
     unit: index
 
-  - id: core_pce
-    name: Core PCE Price Index
-    category: macro_labor
+  - id: capacity_utilization
+    name: Capacity Utilization (Total Industry)
+    category: macro_activity
     source: fred
     frequency: monthly
-    code: PCEPILFE
-    unit: index
+    code: TCU
+    unit: percent
 
+  - id: retail_sales
+    name: Retail Sales (Ex Food Services)
+    category: macro_activity
+    source: fred
+    frequency: monthly
+    code: RSXFS
+    unit: millions_usd
+
+  - id: durable_goods
+    name: Durable Goods Orders
+    category: macro_activity
+    source: fred
+    frequency: monthly
+    code: DGORDER
+    unit: millions_usd
+
+  - id: wei
+    name: Weekly Economic Index
+    category: macro_activity
+    source: fred
+    frequency: weekly
+    code: WEI
+    unit: percent
+
+  # ══════════════════════════════════════════════════════════════════════
+  # LABOR — Employment, wages, and labor market dynamics
+  # ══════════════════════════════════════════════════════════════════════
   - id: unemployment_rate
     name: Unemployment Rate
-    category: macro_labor
+    category: labor
     source: fred
     frequency: monthly
     code: UNRATE
@@ -34,40 +63,117 @@ indicators:
 
   - id: nonfarm_payrolls
     name: Total Non-Farm Payrolls
-    category: macro_labor
+    category: labor
     source: fred
     frequency: monthly
     code: PAYEMS
     unit: thousands
 
-  - id: housing_starts
-    name: Housing Starts
-    category: macro_labor
-    source: fred
-    frequency: monthly
-    code: HOUST
-    unit: thousands
-
   - id: initial_claims
     name: Initial Jobless Claims
-    category: macro_labor
+    category: labor
     source: fred
     frequency: weekly
     code: ICSA
     unit: number
 
-  # ── Rates & Credit (FRED) ────────────────────────────────────────
+  - id: jolts_openings
+    name: JOLTS Job Openings
+    category: labor
+    source: fred
+    frequency: monthly
+    code: JTSJOL
+    unit: thousands
+
+  - id: jolts_quits
+    name: JOLTS Quits Rate
+    category: labor
+    source: fred
+    frequency: monthly
+    code: JTSQUR
+    unit: percent
+
+  - id: prime_age_epop
+    name: Prime-Age Employment-Population Ratio (25-54)
+    category: labor
+    source: fred
+    frequency: monthly
+    code: LNS12300060
+    unit: percent
+
+  - id: avg_hourly_earnings
+    name: Average Hourly Earnings (Private)
+    category: labor
+    source: fred
+    frequency: monthly
+    code: CES0500000003
+    unit: usd
+
+  - id: avg_weekly_hours_mfg
+    name: Average Weekly Hours (Manufacturing)
+    category: labor
+    source: fred
+    frequency: monthly
+    code: AWHMAN
+    unit: hours
+
+  # ══════════════════════════════════════════════════════════════════════
+  # INFLATION & PRICES — Consumer, producer, and market-implied
+  # ══════════════════════════════════════════════════════════════════════
+  - id: cpi_yoy
+    name: CPI All Items
+    category: inflation_prices
+    source: fred
+    frequency: monthly
+    code: CPIAUCSL
+    unit: index
+
+  - id: core_pce
+    name: Core PCE Price Index
+    category: inflation_prices
+    source: fred
+    frequency: monthly
+    code: PCEPILFE
+    unit: index
+
+  - id: ppi_all
+    name: PPI All Commodities
+    category: inflation_prices
+    source: fred
+    frequency: monthly
+    code: PPIACO
+    unit: index
+
+  - id: breakeven_5y
+    name: 5-Year Breakeven Inflation Rate
+    category: inflation_prices
+    source: fred
+    frequency: daily
+    code: T5YIE
+    unit: percent
+
+  # ══════════════════════════════════════════════════════════════════════
+  # RATES & YIELD CURVE — Policy rate, Treasury curve, spreads
+  # ══════════════════════════════════════════════════════════════════════
   - id: fed_funds_rate
     name: Effective Federal Funds Rate
-    category: rates_credit
+    category: rates_curve
     source: fred
     frequency: monthly
     code: FEDFUNDS
     unit: percent
 
+  - id: sofr
+    name: Secured Overnight Financing Rate
+    category: rates_curve
+    source: fred
+    frequency: daily
+    code: SOFR
+    unit: percent
+
   - id: treasury_2y
     name: 2-Year Treasury Yield
-    category: rates_credit
+    category: rates_curve
     source: fred
     frequency: daily
     code: DGS2
@@ -75,7 +181,7 @@ indicators:
 
   - id: treasury_5y
     name: 5-Year Treasury Yield
-    category: rates_credit
+    category: rates_curve
     source: fred
     frequency: daily
     code: DGS5
@@ -83,7 +189,7 @@ indicators:
 
   - id: treasury_10y
     name: 10-Year Treasury Yield
-    category: rates_credit
+    category: rates_curve
     source: fred
     frequency: daily
     code: DGS10
@@ -91,7 +197,7 @@ indicators:
 
   - id: treasury_30y
     name: 30-Year Treasury Yield
-    category: rates_credit
+    category: rates_curve
     source: fred
     frequency: daily
     code: DGS30
@@ -99,7 +205,7 @@ indicators:
 
   - id: spread_10y_2y
     name: 10Y-2Y Treasury Yield Spread
-    category: rates_credit
+    category: rates_curve
     source: fred
     frequency: daily
     code: T10Y2Y
@@ -107,24 +213,155 @@ indicators:
 
   - id: spread_10y_3m
     name: 10Y-3M Treasury Yield Spread
-    category: rates_credit
+    category: rates_curve
     source: fred
     frequency: daily
     code: T10Y3M
     unit: percent
 
+  - id: mortgage_30y
+    name: 30-Year Fixed Mortgage Rate
+    category: rates_curve
+    source: fred
+    frequency: weekly
+    code: MORTGAGE30US
+    unit: percent
+
+  # ══════════════════════════════════════════════════════════════════════
+  # CREDIT CONDITIONS — Spreads, financial conditions, stress
+  # ══════════════════════════════════════════════════════════════════════
   - id: baa_spread
-    name: BAA Corporate Bond Spread
-    category: rates_credit
+    name: BAA Corporate Bond Spread (vs 10Y)
+    category: credit_conditions
     source: fred
     frequency: daily
     code: BAA10Y
     unit: percent
 
-  # ── Markets & Commodities (YFinance) ─────────────────────────────
+  - id: hy_oas
+    name: ICE BofA US High Yield OAS
+    category: credit_conditions
+    source: fred
+    frequency: daily
+    code: BAMLH0A0HYM2
+    unit: percent
+
+  - id: ig_oas
+    name: ICE BofA US Investment Grade OAS
+    category: credit_conditions
+    source: fred
+    frequency: daily
+    code: BAMLC0A0CM
+    unit: percent
+
+  - id: nfci
+    name: Chicago Fed National Financial Conditions Index
+    category: credit_conditions
+    source: fred
+    frequency: weekly
+    code: NFCI
+    unit: index
+
+  - id: stlfsi
+    name: St. Louis Fed Financial Stress Index
+    category: credit_conditions
+    source: fred
+    frequency: weekly
+    code: STLFSI4
+    unit: index
+
+  - id: m2
+    name: M2 Money Supply
+    category: credit_conditions
+    source: fred
+    frequency: weekly
+    code: WM2NS
+    unit: billions_usd
+
+  # ══════════════════════════════════════════════════════════════════════
+  # HOUSING — Starts, permits, prices, mortgage
+  # ══════════════════════════════════════════════════════════════════════
+  - id: housing_starts
+    name: Housing Starts
+    category: housing
+    source: fred
+    frequency: monthly
+    code: HOUST
+    unit: thousands
+
+  - id: building_permits
+    name: New Private Housing Building Permits
+    category: housing
+    source: fred
+    frequency: monthly
+    code: PERMIT
+    unit: thousands
+
+  - id: case_shiller
+    name: Case-Shiller National Home Price Index
+    category: housing
+    source: fred
+    frequency: monthly
+    code: CSUSHPISA
+    unit: index
+
+  # ══════════════════════════════════════════════════════════════════════
+  # LEADING & COMPOSITE — Forward-looking composite indicators
+  # ══════════════════════════════════════════════════════════════════════
+  - id: lei
+    name: Conference Board Leading Economic Index
+    category: leading_composite
+    source: fred
+    frequency: monthly
+    code: USSLIND
+    unit: index
+
+  - id: sahm_rule
+    name: Sahm Rule Real-Time Recession Indicator
+    category: leading_composite
+    source: fred
+    frequency: monthly
+    code: SAHMREALTIME
+    unit: percent
+
+  - id: recession_prob
+    name: Smoothed US Recession Probability
+    category: leading_composite
+    source: fred
+    frequency: monthly
+    code: RECPROUSM156N
+    unit: percent
+
+  - id: consumer_sentiment
+    name: U. Michigan Consumer Sentiment
+    category: leading_composite
+    source: fred
+    frequency: monthly
+    code: UMCSENT
+    unit: index
+
+  - id: ism_mfg_pmi
+    name: ISM Manufacturing New Orders
+    category: leading_composite
+    source: fred
+    frequency: monthly
+    code: NAPMNOI
+    unit: percent
+
+  - id: trade_balance
+    name: US Trade Balance (Goods & Services)
+    category: leading_composite
+    source: fred
+    frequency: monthly
+    code: BOPGSTB
+    unit: millions_usd
+
+  # ══════════════════════════════════════════════════════════════════════
+  # MARKETS — Indices, commodities, FX, crypto, volatility
+  # ══════════════════════════════════════════════════════════════════════
   - id: sp500
     name: S&P 500 ETF (SPY)
-    category: markets_commodities
+    category: markets
     source: yfinance
     frequency: daily
     code: SPY
@@ -132,7 +369,7 @@ indicators:
 
   - id: nasdaq100
     name: Nasdaq 100 ETF (QQQ)
-    category: markets_commodities
+    category: markets
     source: yfinance
     frequency: daily
     code: QQQ
@@ -140,7 +377,7 @@ indicators:
 
   - id: russell2000
     name: Russell 2000 ETF (IWM)
-    category: markets_commodities
+    category: markets
     source: yfinance
     frequency: daily
     code: IWM
@@ -148,15 +385,31 @@ indicators:
 
   - id: vix
     name: CBOE Volatility Index
-    category: markets_commodities
+    category: markets
     source: yfinance
     frequency: daily
     code: "^VIX"
     unit: index
 
+  - id: vix3m
+    name: CBOE 3-Month Volatility Index
+    category: markets
+    source: yfinance
+    frequency: daily
+    code: "^VIX3M"
+    unit: index
+
+  - id: skew
+    name: CBOE SKEW Index
+    category: markets
+    source: yfinance
+    frequency: daily
+    code: "^SKEW"
+    unit: index
+
   - id: crude_oil
     name: WTI Crude Oil Futures
-    category: markets_commodities
+    category: markets
     source: yfinance
     frequency: daily
     code: CL=F
@@ -164,7 +417,7 @@ indicators:
 
   - id: gold
     name: Gold Futures
-    category: markets_commodities
+    category: markets
     source: yfinance
     frequency: daily
     code: GC=F
@@ -172,7 +425,7 @@ indicators:
 
   - id: dxy
     name: US Dollar Index
-    category: markets_commodities
+    category: markets
     source: yfinance
     frequency: daily
     code: DX-Y.NYB
@@ -180,7 +433,7 @@ indicators:
 
   - id: btc
     name: Bitcoin
-    category: markets_commodities
+    category: markets
     source: yfinance
     frequency: daily
     code: BTC-USD
@@ -188,7 +441,7 @@ indicators:
 
   - id: eth
     name: Ethereum
-    category: markets_commodities
+    category: markets
     source: yfinance
     frequency: daily
     code: ETH-USD
@@ -196,74 +449,73 @@ indicators:
 
   - id: hy_bond
     name: High Yield Corporate Bond ETF
-    category: markets_commodities
+    category: markets
     source: yfinance
     frequency: daily
     code: HYG
     unit: usd
 
-  # ── Equities / Fundamentals (YFinance) ───────────────────────────
-  - id: aapl
-    name: Apple Inc.
-    category: equities
+  # ── Sector ETFs ──
+  - id: xlf
+    name: Financial Select SPDR
+    category: markets
     source: yfinance
     frequency: daily
-    code: AAPL
+    code: XLF
     unit: usd
 
-  - id: msft
-    name: Microsoft Corp.
-    category: equities
+  - id: xlk
+    name: Technology Select SPDR
+    category: markets
     source: yfinance
     frequency: daily
-    code: MSFT
+    code: XLK
     unit: usd
 
-  - id: googl
-    name: Alphabet Inc.
-    category: equities
+  - id: xle
+    name: Energy Select SPDR
+    category: markets
     source: yfinance
     frequency: daily
-    code: GOOGL
+    code: XLE
     unit: usd
 
-  - id: amzn
-    name: Amazon.com Inc.
-    category: equities
+  - id: xlv
+    name: Health Care Select SPDR
+    category: markets
     source: yfinance
     frequency: daily
-    code: AMZN
+    code: XLV
     unit: usd
 
-  - id: nvda
-    name: NVIDIA Corp.
-    category: equities
+  - id: xli
+    name: Industrial Select SPDR
+    category: markets
     source: yfinance
     frequency: daily
-    code: NVDA
+    code: XLI
     unit: usd
 
-  - id: meta
-    name: Meta Platforms Inc.
-    category: equities
+  - id: xlre
+    name: Real Estate Select SPDR
+    category: markets
     source: yfinance
     frequency: daily
-    code: META
+    code: XLRE
     unit: usd
 
-  # ── Derivatives / Positioning (Placeholder) ──────────────────────
-  - id: spx_options_volume
-    name: SPX Options Volume
-    category: derivatives
-    source: placeholder
+  - id: xly
+    name: Consumer Discretionary SPDR
+    category: markets
+    source: yfinance
     frequency: daily
-    code: SPX_OPT_VOL
-    unit: contracts
+    code: XLY
+    unit: usd
 
-  - id: vix_term_structure
-    name: VIX Term Structure
-    category: derivatives
-    source: placeholder
+  - id: xlp
+    name: Consumer Staples SPDR
+    category: markets
+    source: yfinance
     frequency: daily
-    code: VIX_TERM
-    unit: index
+    code: XLP
+    unit: usd

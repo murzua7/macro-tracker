@@ -8,9 +8,10 @@ venv/
 *.egg-info/
 dist/
 build/
-macro_data.db
+# macro_data.db is tracked — needed for Streamlit Cloud deployment
 *.log
 .ruff_cache/
 .mypy_cache/
 htmlcov/
 .coverage
+.streamlit/secrets.toml

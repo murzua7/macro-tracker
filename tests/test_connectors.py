@@ -1,4 +1,4 @@
-"""Tests for data connectors (FRED, YFinance, Placeholder)."""
+"""Tests for data connectors (FRED, YFinance)."""
 
 from unittest.mock import MagicMock, patch
 
@@ -17,7 +17,7 @@ def _make_spec(source="fred", code="TEST", **kwargs) -> IndicatorSpec:
     defaults = dict(
         id="test_ind",
         name="Test",
-        category=Category.MACRO_LABOR,
+        category=Category.MACRO_ACTIVITY,
         source=source,
         frequency=Frequency.MONTHLY,
         code=code,
@@ -33,7 +33,6 @@ class TestFredConnector:
         mock_client = MagicMock()
         MockFred.return_value = mock_client
 
-        # Simulate FRED returning a pandas Series
         dates = pd.date_range("2024-01-01", periods=3, freq="MS")
         series = pd.Series([3.1, 3.2, 3.3], index=dates)
         mock_client.get_series.return_value = series
@@ -103,14 +102,4 @@ class TestYFinanceConnector:
         spec = _make_spec(source="yfinance", code="EMPTY", frequency=Frequency.DAILY, unit="usd")
 
         points = connector.fetch(spec, "2024-01-01", "2024-01-05")
-        assert points == []
-
-
-class TestPlaceholderConnector:
-    def test_returns_empty(self):
-        from macro_tracker.connectors.placeholder import PlaceholderConnector
-
-        connector = PlaceholderConnector()
-        spec = _make_spec(source="placeholder", code="SPX_OPT_VOL", category=Category.DERIVATIVES)
-        points = connector.fetch(spec, "2024-01-01", "2024-12-31")
         assert points == []
