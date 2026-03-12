@@ -1,10 +1,14 @@
 # US Macrofinance Tracker
 
-Production-ready system that ingests, normalizes, stores, and serves near-real-time and periodic macroeconomic and financial indicators relevant to US economic health.
+[![CI](https://github.com/murzua7/macro-tracker/actions/workflows/ci.yml/badge.svg)](https://github.com/murzua7/macro-tracker/actions/workflows/ci.yml)
+
+**[Live Dashboard](https://us-macro-tracker.streamlit.app/)**
+
+Production-ready system that ingests, normalizes, stores, and serves near-real-time macroeconomic and financial indicators relevant to US economic health.
 
 ## Features
 
-- **68 indicators** across 8 categories: Macro Activity, Labor, Inflation & Prices, Rates & Yield Curve, Credit Conditions, Housing, Leading & Composite, Markets
+- **62 indicators** across 8 categories with hover-tooltip descriptions explaining what each measures and why it matters
 - **Analytics engine**: percentiles, z-scores, rate-of-change, recession probability (Estrella-Mishkin), regime detection, composite leading index (OECD-style), financial stress index (PCA-based), diffusion index, cross-correlation
 - **Plugin-style registry** (`registry.yaml`) — add indicators without code changes
 - **Connectors** for FRED and Yahoo Finance with retry and rate-limit handling
@@ -13,6 +17,21 @@ Production-ready system that ingests, normalizes, stores, and serves near-real-t
 - **Streamlit dashboard** — 8 tabs: Overview, Recession Risk, Heatmap, Composites, Charts, Compare, Cross-Correlation, Freshness
 - **Automated daily ingestion** via GitHub Actions
 - **Free deployment** on Streamlit Community Cloud
+
+## Dashboard
+
+The dashboard is live at **[us-macro-tracker.streamlit.app](https://us-macro-tracker.streamlit.app/)** and includes:
+
+| Tab | Description |
+|-----|-------------|
+| Overview | Latest readings with trend arrows, rate-of-change deltas, and percentile tooltips |
+| Recession Risk | Composite score from yield curve probability, Sahm Rule, NFCI, and HY OAS |
+| Heatmap | Color-coded percentile/z-score table with momentum bar chart |
+| Composites | Leading economic index, financial stress index, and diffusion index |
+| Charts | Individual indicator timeseries with sparklines and analytics |
+| Compare | Multi-indicator overlay with optional z-score normalization and rolling correlation |
+| Cross-Correlation | Lead-lag analysis between any two indicators |
+| Freshness | Data staleness monitor for all indicators |
 
 ## Quick Start (Local)
 
@@ -39,14 +58,16 @@ streamlit run src/macro_tracker/dashboard/app.py
 
 | Category | Count | Source | Examples |
 |----------|-------|--------|----------|
-| Macro Activity | 6 | FRED | GDP, Industrial Production, Retail Sales |
-| Labor | 8 | FRED | Unemployment, Nonfarm Payrolls, Initial Claims, Sahm Rule |
-| Inflation & Prices | 4 | FRED | CPI, PCE, PPI, 5Y Breakeven |
-| Rates & Yield Curve | 9 | FRED | Fed Funds, 2Y/10Y/30Y Treasury, Spreads, SOFR, Mortgage |
-| Credit Conditions | 6 | FRED | HY OAS, IG OAS, NFCI, StL FSI, M2 |
-| Housing | 3 | FRED | Building Permits, Case-Shiller, Mortgage Rate |
+| Macro Activity | 6 | FRED | GDP, Industrial Production, Retail Sales, WEI |
+| Labor | 8 | FRED | Unemployment, Nonfarm Payrolls, Initial Claims, JOLTS |
+| Inflation & Prices | 4 | FRED | CPI, Core PCE, PPI, 5Y Breakeven |
+| Rates & Yield Curve | 9 | FRED | Fed Funds, SOFR, 2Y/5Y/10Y/30Y Treasury, Spreads, Mortgage |
+| Credit Conditions | 6 | FRED | HY OAS, IG OAS, BAA Spread, NFCI, StL FSI, M2 |
+| Housing | 3 | FRED | Housing Starts, Building Permits, Case-Shiller |
 | Leading & Composite | 6 | FRED | LEI, Sahm Rule, Recession Prob, Consumer Sentiment, ISM |
-| Markets | 20 | YFinance | S&P 500, VIX, Gold, Oil, BTC, 8 Sector ETFs |
+| Markets | 20 | Yahoo Finance | S&P 500, Nasdaq 100, VIX, Gold, Oil, BTC, 8 Sector ETFs |
+
+All 62 indicators include human-readable descriptions accessible via hover tooltips in the dashboard.
 
 ## Configuration
 
