@@ -1,59 +1,61 @@
-# Macro Tracker
+# US Macrofinance Tracker
 
-Daily Python ETL for US macroeconomic indicators using FRED and Yahoo Finance,
-with SQLite storage and optional GitHub repository bootstrap through `gh`.
+Production-ready system that ingests, normalizes, stores, and serves near-real-time and periodic macroeconomic and financial indicators relevant to US economic health.
 
-## Tracked series
+## Features
 
-- Inflation: CPI (`CPIAUCSL`), Core PCE (`PCEPILFE`)
-- Employment: Non-Farm Payrolls (`PAYEMS`), Unemployment Rate (`UNRATE`)
-- Rates: Effective Fed Funds Rate (`DFF`), 10Y-2Y Treasury spread (`T10Y2Y`)
-- Growth: Real GDP (`GDPC1`)
-- Market proxies: S&P 500 (`^GSPC`), DXY (`DX-Y.NYB`), 10Y Treasury yield (`^TNX`)
+- **33 indicators** across 5 domains: Macro & Labor, Rates & Credit, Markets & Commodities, Equities, Derivatives
+- **Plugin-style registry** (`registry.yaml`) — add indicators without code changes
+- **Connectors** for FRED and Yahoo Finance with retry and rate-limit handling
+- **Canonical schema** — every data point normalized to (timestamp, indicator_id, value, unit, frequency, source)
+- **SQLite storage** structured for easy migration to Postgres
+- **FastAPI backend** — list indicators, fetch timeseries, get latest snapshots
+- **Streamlit dashboard** — headline cards, category charts, and alerts
 
-## Setup
+## Quick Start
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
+# Clone and install
+python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-printf "FRED_API_KEY=your_fred_api_key\n" > .env
-python run_tracker.py
+
+# Configure
+cp .env.example .env
+# Edit .env with your FRED_API_KEY
+
+# Ingest data
+python scripts/ingest.py
+
+# Start API server
+uvicorn src.macro_tracker.api.main:app --reload
+
+# Start dashboard (in another terminal)
+streamlit run src/macro_tracker/dashboard/app.py
 ```
 
-You can also export `FRED_API_KEY` in your shell, but `.env` keeps the secret scoped
-to this project and avoids putting it in chat history.
+## Indicator Domains
 
-## Daily batch usage
+| Domain | Count | Source |
+|--------|-------|--------|
+| Macro & Labor | 7 | FRED |
+| Rates & Credit | 8 | FRED |
+| Markets & Commodities | 10 | YFinance |
+| Equities / Fundamentals | 6 | YFinance |
+| Derivatives / Positioning | 2 | Placeholder |
 
-Run the same command every day from cron, Task Scheduler, or any job runner:
+## Configuration
+
+All secrets are managed via `.env` file (never committed):
+
+- `FRED_API_KEY` — required for FRED data
+- `DATABASE_URL` — defaults to `sqlite:///macro_data.db`
+- `LOG_LEVEL` — defaults to `INFO`
+- `START_DATE` — historical backfill start date
+
+## Development
 
 ```bash
-python run_tracker.py
+pip install -e ".[dev]"
+ruff check src/ tests/
+pytest tests/ -v
 ```
-
-The ETL computes a rolling lookback window so it can safely upsert new rows and
-refresh recent percentage-change calculations without duplicating data.
-
-## Dashboard
-
-Launch the local dashboard with:
-
-```bash
-streamlit run dashboard.py
-```
-
-The dashboard reads from `macro_data.db` and includes:
-
-- latest macro snapshot cards
-- category-level trend charts
-- single-indicator drilldowns with MoM and YoY views
-- rolling correlation analysis across indicators
-
-## GitHub bootstrap
-
-```bash
-python run_tracker.py --setup-github your-repo-name
-```
-
-This assumes `gh auth login` has already been completed successfully.
