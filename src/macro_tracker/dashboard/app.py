@@ -10,7 +10,6 @@ _src_dir = str(Path(__file__).resolve().parent.parent.parent)
 if _src_dir not in sys.path:
     sys.path.insert(0, _src_dir)
 
-import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
@@ -34,7 +33,6 @@ from macro_tracker.analytics import (
 )
 from macro_tracker.db import Database
 from macro_tracker.registry import load_registry
-from macro_tracker.schema import IndicatorInfo
 
 st.set_page_config(page_title="US Macrofinance Tracker", layout="wide")
 
@@ -368,7 +366,10 @@ with tabs[0]:
 
                 ind_desc = desc_map.get(entry["indicator_id"], "")
                 help_text = f"{ind_desc}\n\n" if ind_desc else ""
-                help_text += f"{entry['indicator_id']} | {entry['unit']} | {entry['latest_timestamp'] or 'N/A'}"
+                ts_str = entry['latest_timestamp'] or 'N/A'
+                help_text += (
+                    f"{entry['indicator_id']} | {entry['unit']} | {ts_str}"
+                )
                 if pct is not None:
                     help_text += f" | Percentile: {pct:.0f}th"
 
@@ -390,7 +391,10 @@ with tabs[1]:
         composite = recession_data.get("composite", {})
         score = composite.get("score")
         level = composite.get("level", "unknown")
-        level_labels = {"low": "LOW", "moderate": "MODERATE", "elevated": "ELEVATED", "high": "HIGH"}
+        level_labels = {
+            "low": "LOW", "moderate": "MODERATE",
+            "elevated": "ELEVATED", "high": "HIGH",
+        }
 
         col1, col2, col3 = st.columns([2, 1, 1])
         with col1:
@@ -400,8 +404,16 @@ with tabs[1]:
                 st.caption(f"Score: {score}/100")
         with col2:
             yc_prob = recession_data.get("yield_curve_prob")
-            st.metric("Yield Curve Prob.", f"{yc_prob:.1f}%" if yc_prob else "N/A",
-                       help="12-month recession probability derived from the 10Y-3M Treasury spread using the Estrella-Mishkin probit model. Above 30% = elevated; above 50% = high risk.")
+            yc_help = (
+                "12-month recession probability from the 10Y-3M "
+                "Treasury spread (Estrella-Mishkin probit). "
+                "Above 30% = elevated; above 50% = high risk."
+            )
+            st.metric(
+                "Yield Curve Prob.",
+                f"{yc_prob:.1f}%" if yc_prob else "N/A",
+                help=yc_help,
+            )
         with col3:
             sahm = recession_data.get("sahm_rule", {})
             st.metric("Sahm Rule", sahm.get("label", "N/A"))
@@ -411,11 +423,27 @@ with tabs[1]:
         c1.metric("Yield Curve", f"{yc_prob:.1f}%" if yc_prob else "N/A")
         c2.metric("Sahm Rule", sahm.get("label", "N/A"))
         nfci_val = recession_data.get("nfci")
-        c3.metric("NFCI", f"{nfci_val:.3f}" if nfci_val is not None else "N/A",
-                   help="Chicago Fed National Financial Conditions Index. Weighted average of 105 indicators. Positive = tighter than average (restrictive); negative = looser (accommodative).")
+        nfci_help = (
+            "Chicago Fed NFCI. Weighted average of 105 "
+            "indicators. Positive = tighter than average "
+            "(restrictive); negative = looser (accommodative)."
+        )
+        c3.metric(
+            "NFCI",
+            f"{nfci_val:.3f}" if nfci_val is not None else "N/A",
+            help=nfci_help,
+        )
         hy_val = recession_data.get("hy_oas")
-        c4.metric("HY OAS", f"{hy_val:.2f}%" if hy_val is not None else "N/A",
-                   help="ICE BofA High Yield Option-Adjusted Spread. Measures credit risk premium on junk bonds. Above 500bps = distress; above 800bps = crisis conditions.")
+        hy_help = (
+            "ICE BofA HY OAS. Credit risk premium on junk "
+            "bonds. Above 500bps = distress; "
+            "above 800bps = crisis conditions."
+        )
+        c4.metric(
+            "HY OAS",
+            f"{hy_val:.2f}%" if hy_val is not None else "N/A",
+            help=hy_help,
+        )
 
         # Yield curve recession probability time series
         ts = fetch_timeseries("spread_10y_3m")
@@ -425,8 +453,11 @@ with tabs[1]:
             df["timestamp"] = pd.to_datetime(df["timestamp"])
             df["recession_prob"] = df["value"].apply(lambda s: norm.cdf(-0.5333 - 0.6330 * s) * 100)
             fig = go.Figure()
-            fig.add_trace(go.Scatter(x=df["timestamp"], y=df["recession_prob"],
-                                      mode="lines", name="Recession Prob.", line=dict(color="crimson")))
+            fig.add_trace(go.Scatter(
+                x=df["timestamp"], y=df["recession_prob"],
+                mode="lines", name="Recession Prob.",
+                line=dict(color="crimson"),
+            ))
             fig.add_hline(y=30, line_dash="dash", line_color="orange", annotation_text="30%")
             fig.add_hline(y=50, line_dash="dash", line_color="red", annotation_text="50%")
             fig.update_layout(title="Yield Curve Recession Probability (12-month horizon)",
@@ -497,8 +528,14 @@ with tabs[2]:
                         ind_id = s["indicator_id"]
                         desc = desc_map_heat.get(ind_id, "")
                         info = registry_map.get(ind_id, {})
-                        if desc and (not selected_category or info.get("category") == selected_category):
-                            st.markdown(f"**{info.get('name', ind_id)}** — {desc}")
+                        matches_cat = (
+                            not selected_category
+                            or info.get("category") == selected_category
+                        )
+                        if desc and matches_cat:
+                            st.markdown(
+                                f"**{info.get('name', ind_id)}** — {desc}"
+                            )
 
                 # Momentum bar chart
                 st.subheader("Momentum (Rate of Change)")
@@ -546,7 +583,10 @@ with tabs[2]:
                           .applymap(_color_pct, subset=pct_cols)
                           .format({c: "{:.0f}" for c in pct_cols}, na_rep="--"))
                 st.dataframe(styled, use_container_width=True, height=600)
-                st.caption("Values are percentile ranks (0-100). Green = normal, Orange = notable, Red = extreme.")
+                st.caption(
+                    "Values are percentile ranks (0-100). "
+                    "Green = normal, Orange = notable, Red = extreme."
+                )
 
                 desc_map_hist = get_description_map()
                 with st.expander("Indicator Guide"):
@@ -554,8 +594,14 @@ with tabs[2]:
                         ind_id = h["indicator_id"]
                         desc = desc_map_hist.get(ind_id, "")
                         info = registry_map.get(ind_id, {})
-                        if desc and (not selected_category or info.get("category") == selected_category):
-                            st.markdown(f"**{info.get('name', ind_id)}** — {desc}")
+                        matches_cat = (
+                            not selected_category
+                            or info.get("category") == selected_category
+                        )
+                        if desc and matches_cat:
+                            st.markdown(
+                                f"**{info.get('name', ind_id)}** — {desc}"
+                            )
         else:
             st.info("No data for historical heatmap.")
 
@@ -580,7 +626,10 @@ with tabs[3]:
             fig.add_trace(go.Scatter(x=df["timestamp"], y=df["composite_index"],
                                       mode="lines", name="Composite Leading Index",
                                       line=dict(color="royalblue", width=2)))
-            fig.add_hline(y=100, line_dash="dash", line_color="gray", annotation_text="Neutral (100)")
+            fig.add_hline(
+                y=100, line_dash="dash", line_color="gray",
+                annotation_text="Neutral (100)",
+            )
             fig.update_layout(title="Composite Leading Index (mean=100, std=10)",
                               yaxis_title="Index", height=450)
             st.plotly_chart(fig, use_container_width=True)
@@ -597,11 +646,17 @@ with tabs[3]:
                 fig2.add_hline(y=0, line_dash="dash", line_color="gray")
                 st.plotly_chart(fig2, use_container_width=True)
         else:
-            st.info("Insufficient data. Need at least 2 leading indicators with 12+ months of data.")
+            st.info(
+                "Insufficient data. Need at least 2 leading "
+                "indicators with 12+ months of data."
+            )
 
     elif sub_tab == "Financial Stress":
         st.subheader("Financial Stress Index (OFR-style)")
-        st.caption("PCA-based composite of: HY OAS, IG OAS, BAA spread, VIX, NFCI, StL FSI, yield curve (inv.)")
+        st.caption(
+            "PCA-based composite of: HY OAS, IG OAS, BAA spread, "
+            "VIX, NFCI, StL FSI, yield curve (inv.)"
+        )
 
         data = fetch_stress_index()
         if data and data.get("data"):
@@ -618,14 +673,20 @@ with tabs[3]:
             fig.add_hline(y=0, line_dash="dash", line_color="gray", annotation_text="Average")
             fig.add_hline(y=1, line_dash="dot", line_color="orange", annotation_text="+1 SD")
             fig.add_hline(y=2, line_dash="dot", line_color="red", annotation_text="+2 SD")
-            fig.update_layout(title="Financial Stress Index", yaxis_title="Stress (z-score units)", height=450)
+            fig.update_layout(
+                title="Financial Stress Index",
+                yaxis_title="Stress (z-score units)", height=450,
+            )
             st.plotly_chart(fig, use_container_width=True)
 
             if weights:
                 w1, w2 = st.columns(2)
                 with w1:
                     st.subheader("PCA Weights")
-                    wdf = pd.DataFrame([{"Component": k, "Weight": f"{v:.3f}"} for k, v in weights.items()])
+                    wdf = pd.DataFrame([
+                        {"Component": k, "Weight": f"{v:.3f}"}
+                        for k, v in weights.items()
+                    ])
                     st.dataframe(wdf, use_container_width=True, hide_index=True)
                 with w2:
                     if explained:
@@ -661,14 +722,19 @@ with tabs[3]:
             fig.add_hline(y=0.5, line_dash="dash", line_color="red",
                           annotation_text="50% threshold (broad deterioration below)")
             fig.update_layout(title="Economic Diffusion Index",
-                              yaxis_title="Fraction Improving", yaxis=dict(range=[0, 1]), height=400)
+                              yaxis_title="Fraction Improving",
+                              yaxis=dict(range=[0, 1]), height=400)
             st.plotly_chart(fig, use_container_width=True)
 
             latest = df.iloc[-1]
             c1, c2, c3 = st.columns(3)
             c1.metric("Current Diffusion", f"{latest['diffusion']:.1%}")
             c2.metric("Improving", f"{int(latest['improving'])} / {int(latest['n_indicators'])}")
-            c3.metric("Deteriorating", f"{int(latest['deteriorating'])} / {int(latest['n_indicators'])}")
+            n_ind = int(latest['n_indicators'])
+            c3.metric(
+                "Deteriorating",
+                f"{int(latest['deteriorating'])} / {n_ind}",
+            )
         else:
             st.info("Insufficient data for diffusion index.")
 
@@ -697,7 +763,10 @@ with tabs[4]:
             st.divider()
 
         indicator_map = {f"{ind['name']} ({ind['id']})": ind['id'] for ind in indicators}
-        selected_label = st.selectbox("Select indicator for detail", list(indicator_map.keys()), key="chart_ind")
+        selected_label = st.selectbox(
+            "Select indicator for detail",
+            list(indicator_map.keys()), key="chart_ind",
+        )
         selected_id = indicator_map[selected_label]
         sel_desc = get_description_map().get(selected_id, "")
         if sel_desc:
@@ -794,7 +863,10 @@ with tabs[6]:
         ind_labels = list(ind_map.keys())
         col1, col2 = st.columns(2)
         label1 = col1.selectbox("First indicator", ind_labels, key="cc1")
-        label2 = col2.selectbox("Second indicator", ind_labels, index=min(1, len(ind_labels)-1), key="cc2")
+        label2 = col2.selectbox(
+            "Second indicator", ind_labels,
+            index=min(1, len(ind_labels) - 1), key="cc2",
+        )
         max_lag = st.slider("Max lag (months)", 6, 48, 24, key="ccl")
 
         cc_desc_map = get_description_map()
@@ -823,7 +895,10 @@ with tabs[6]:
 
                 colors = ["crimson" if c is not None and abs(c) > 0.5 else "steelblue"
                           for c in ccf_df["correlation"]]
-                fig = go.Figure(go.Bar(x=ccf_df["lag"], y=ccf_df["correlation"], marker_color=colors))
+                fig = go.Figure(go.Bar(
+                    x=ccf_df["lag"], y=ccf_df["correlation"],
+                    marker_color=colors,
+                ))
                 fig.add_hline(y=0, line_color="black", line_width=1)
                 fig.add_hline(y=0.5, line_dash="dash", line_color="gray")
                 fig.add_hline(y=-0.5, line_dash="dash", line_color="gray")

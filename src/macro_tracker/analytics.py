@@ -226,7 +226,11 @@ def classify_lead_lag(ccf: pd.DataFrame) -> dict:
         classification = f"s1 leads by {best_lag} months"
     else:
         classification = f"s2 leads by {-best_lag} months"
-    return {"best_lag": best_lag, "best_corr": round(best_corr, 3), "classification": classification}
+    return {
+        "best_lag": best_lag,
+        "best_corr": round(best_corr, 3),
+        "classification": classification,
+    }
 
 
 # ══════════════════════════════════════════════════════════════════════
@@ -311,7 +315,11 @@ def detect_regime(db: Database) -> dict:
 
     # Determine regime
     if n_signals == 0:
-        return {"regime": "UNKNOWN", "color": "#999999", "description": "Insufficient data", "signals": signals, "score": 0, "max_score": 0}
+        return {
+            "regime": "UNKNOWN", "color": "#999999",
+            "description": "Insufficient data",
+            "signals": signals, "score": 0, "max_score": 0,
+        }
 
     max_score = n_signals * 2
     pct = score / max_score * 100

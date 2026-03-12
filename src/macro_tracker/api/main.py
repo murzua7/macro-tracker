@@ -88,7 +88,10 @@ def get_timeseries(
         raise HTTPException(status_code=404, detail=f"Indicator '{indicator_id}' not found")
     db = _get_db()
     data = db.get_timeseries(indicator_id, start=start, end=end, limit=limit)
-    return TimeseriesResponse(indicator_id=indicator_id, indicator_name=spec.name, unit=spec.unit, data=data)
+    return TimeseriesResponse(
+        indicator_id=indicator_id, indicator_name=spec.name,
+        unit=spec.unit, data=data,
+    )
 
 
 @app.get("/snapshot", response_model=list[SnapshotEntry])
