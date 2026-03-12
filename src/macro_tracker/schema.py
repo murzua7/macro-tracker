@@ -40,6 +40,7 @@ class IndicatorSpec(BaseModel):
     frequency: Frequency
     code: str
     unit: str
+    description: str = ""
 
 
 class DataPoint(BaseModel):

@@ -78,9 +78,16 @@ def get_registry():
     indicators = load_registry()
     return [
         {"id": i.id, "name": i.name, "category": i.category.value,
-         "source": i.source.value, "frequency": i.frequency.value, "unit": i.unit}
+         "source": i.source.value, "frequency": i.frequency.value, "unit": i.unit,
+         "description": i.description}
         for i in indicators
     ]
+
+
+@st.cache_data(ttl=300)
+def get_description_map():
+    indicators = load_registry()
+    return {i.id: i.description for i in indicators if i.description}
 
 
 @st.cache_data(ttl=300)
@@ -338,6 +345,7 @@ with tabs[0]:
     snapshot = fetch_snapshot(category=selected_category)
     summary_data = fetch_summary() or []
     summary_map = {s["indicator_id"]: s for s in summary_data}
+    desc_map = get_description_map()
 
     if snapshot:
         cats_seen = {}
@@ -358,7 +366,9 @@ with tabs[0]:
                 roc = analytics.get("roc_pct")
                 delta_str = f"{roc:+.1f}%" if roc is not None else None
 
-                help_text = f"{entry['indicator_id']} | {entry['unit']} | {entry['latest_timestamp'] or 'N/A'}"
+                ind_desc = desc_map.get(entry["indicator_id"], "")
+                help_text = f"{ind_desc}\n\n" if ind_desc else ""
+                help_text += f"{entry['indicator_id']} | {entry['unit']} | {entry['latest_timestamp'] or 'N/A'}"
                 if pct is not None:
                     help_text += f" | Percentile: {pct:.0f}th"
 
@@ -391,7 +401,7 @@ with tabs[1]:
         with col2:
             yc_prob = recession_data.get("yield_curve_prob")
             st.metric("Yield Curve Prob.", f"{yc_prob:.1f}%" if yc_prob else "N/A",
-                       help="12-month recession probability (Estrella-Mishkin)")
+                       help="12-month recession probability derived from the 10Y-3M Treasury spread using the Estrella-Mishkin probit model. Above 30% = elevated; above 50% = high risk.")
         with col3:
             sahm = recession_data.get("sahm_rule", {})
             st.metric("Sahm Rule", sahm.get("label", "N/A"))
@@ -402,10 +412,10 @@ with tabs[1]:
         c2.metric("Sahm Rule", sahm.get("label", "N/A"))
         nfci_val = recession_data.get("nfci")
         c3.metric("NFCI", f"{nfci_val:.3f}" if nfci_val is not None else "N/A",
-                   help=">0 = tighter than average")
+                   help="Chicago Fed National Financial Conditions Index. Weighted average of 105 indicators. Positive = tighter than average (restrictive); negative = looser (accommodative).")
         hy_val = recession_data.get("hy_oas")
         c4.metric("HY OAS", f"{hy_val:.2f}%" if hy_val is not None else "N/A",
-                   help=">600bps = elevated risk")
+                   help="ICE BofA High Yield Option-Adjusted Spread. Measures credit risk premium on junk bonds. Above 500bps = distress; above 800bps = crisis conditions.")
 
         # Yield curve recession probability time series
         ts = fetch_timeseries("spread_10y_3m")
@@ -455,6 +465,7 @@ with tabs[2]:
                     "Accel": s["acceleration"],
                 })
             df_heat = pd.DataFrame(rows)
+            desc_map_heat = get_description_map()
             if not df_heat.empty:
                 def _color_pct(val):
                     if val is None or pd.isna(val):
@@ -480,6 +491,14 @@ with tabs[2]:
                           .format({"Value": "{:,.2f}", "Pctile": "{:.0f}", "Z": "{:.2f}",
                                    "RoC%": "{:+.1f}", "Accel": "{:+.3f}"}, na_rep="--"))
                 st.dataframe(styled, use_container_width=True, height=600)
+
+                with st.expander("Indicator Guide"):
+                    for s in summary_data:
+                        ind_id = s["indicator_id"]
+                        desc = desc_map_heat.get(ind_id, "")
+                        info = registry_map.get(ind_id, {})
+                        if desc and (not selected_category or info.get("category") == selected_category):
+                            st.markdown(f"**{info.get('name', ind_id)}** — {desc}")
 
                 # Momentum bar chart
                 st.subheader("Momentum (Rate of Change)")
@@ -528,6 +547,15 @@ with tabs[2]:
                           .format({c: "{:.0f}" for c in pct_cols}, na_rep="--"))
                 st.dataframe(styled, use_container_width=True, height=600)
                 st.caption("Values are percentile ranks (0-100). Green = normal, Orange = notable, Red = extreme.")
+
+                desc_map_hist = get_description_map()
+                with st.expander("Indicator Guide"):
+                    for h in heatmap_data:
+                        ind_id = h["indicator_id"]
+                        desc = desc_map_hist.get(ind_id, "")
+                        info = registry_map.get(ind_id, {})
+                        if desc and (not selected_category or info.get("category") == selected_category):
+                            st.markdown(f"**{info.get('name', ind_id)}** — {desc}")
         else:
             st.info("No data for historical heatmap.")
 
@@ -671,6 +699,9 @@ with tabs[4]:
         indicator_map = {f"{ind['name']} ({ind['id']})": ind['id'] for ind in indicators}
         selected_label = st.selectbox("Select indicator for detail", list(indicator_map.keys()), key="chart_ind")
         selected_id = indicator_map[selected_label]
+        sel_desc = get_description_map().get(selected_id, "")
+        if sel_desc:
+            st.caption(f"ℹ️ {sel_desc}")
 
         col1, col2 = st.columns(2)
         start_date = col1.date_input("Start", value=pd.Timestamp("2020-01-01"), key="cs")
@@ -765,6 +796,17 @@ with tabs[6]:
         label1 = col1.selectbox("First indicator", ind_labels, key="cc1")
         label2 = col2.selectbox("Second indicator", ind_labels, index=min(1, len(ind_labels)-1), key="cc2")
         max_lag = st.slider("Max lag (months)", 6, 48, 24, key="ccl")
+
+        cc_desc_map = get_description_map()
+        cc_descs = []
+        for lbl, key in [(label1, ind_map[label1]), (label2, ind_map[label2])]:
+            d = cc_desc_map.get(key, "")
+            if d:
+                cc_descs.append(f"**{lbl}** — {d}")
+        if cc_descs:
+            with st.expander("About these indicators"):
+                for line in cc_descs:
+                    st.markdown(line)
 
         if st.button("Compute"):
             ind1, ind2 = ind_map[label1], ind_map[label2]

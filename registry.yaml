@@ -9,6 +9,7 @@ indicators:
     frequency: quarterly
     code: A191RL1Q225SBEA
     unit: percent
+    description: "Quarter-over-quarter growth rate of real GDP at annualized pace. The broadest measure of economic output. Consecutive negative readings historically signal recession."
 
   - id: industrial_production
     name: Industrial Production Index
@@ -17,6 +18,7 @@ indicators:
     frequency: monthly
     code: INDPRO
     unit: index
+    description: "Measures real output of manufacturing, mining, and utilities. A coincident indicator that tracks the goods-producing sector of the economy."
 
   - id: capacity_utilization
     name: Capacity Utilization (Total Industry)
@@ -25,6 +27,7 @@ indicators:
     frequency: monthly
     code: TCU
     unit: percent
+    description: "Percentage of productive capacity in use across all industries. Readings above 80% suggest inflationary pressure; below 75% signals slack."
 
   - id: retail_sales
     name: Retail Sales (Ex Food Services)
@@ -33,6 +36,7 @@ indicators:
     frequency: monthly
     code: RSXFS
     unit: millions_usd
+    description: "Total retail sales excluding food services. A key gauge of consumer spending, which drives roughly 70% of US GDP."
 
   - id: durable_goods
     name: Durable Goods Orders
@@ -41,6 +45,7 @@ indicators:
     frequency: monthly
     code: DGORDER
     unit: millions_usd
+    description: "New orders for long-lasting manufactured goods. A leading indicator of business investment and manufacturing activity. Volatile due to aircraft orders."
 
   - id: wei
     name: Weekly Economic Index
@@ -49,6 +54,7 @@ indicators:
     frequency: weekly
     code: WEI
     unit: percent
+    description: "High-frequency composite index scaled to 4-quarter GDP growth. Combines 10 weekly indicators to provide a real-time read on economic conditions."
 
   # ══════════════════════════════════════════════════════════════════════
   # LABOR — Employment, wages, and labor market dynamics
@@ -60,6 +66,7 @@ indicators:
     frequency: monthly
     code: UNRATE
     unit: percent
+    description: "Percentage of the labor force actively seeking work. A lagging indicator — typically peaks well after recession starts. Sub-4% is historically tight."
 
   - id: nonfarm_payrolls
     name: Total Non-Farm Payrolls
@@ -68,6 +75,7 @@ indicators:
     frequency: monthly
     code: PAYEMS
     unit: thousands
+    description: "Total number of paid US workers excluding farm employees. The most-watched employment gauge. Month-over-month changes above 200K signal strong hiring."
 
   - id: initial_claims
     name: Initial Jobless Claims
@@ -76,6 +84,7 @@ indicators:
     frequency: weekly
     code: ICSA
     unit: number
+    description: "Weekly count of new unemployment insurance filings. A leading indicator — rising claims often precede labor market downturns. Below 250K is historically healthy."
 
   - id: jolts_openings
     name: JOLTS Job Openings
@@ -84,6 +93,7 @@ indicators:
     frequency: monthly
     code: JTSJOL
     unit: thousands
+    description: "Number of unfilled job positions from the Job Openings and Labor Turnover Survey. High openings relative to unemployed workers indicate a tight labor market."
 
   - id: jolts_quits
     name: JOLTS Quits Rate
@@ -92,6 +102,7 @@ indicators:
     frequency: monthly
     code: JTSQUR
     unit: percent
+    description: "Percentage of workers voluntarily leaving jobs. Higher quits signal worker confidence in finding better positions — a barometer of labor market strength."
 
   - id: prime_age_epop
     name: Prime-Age Employment-Population Ratio (25-54)
@@ -100,6 +111,7 @@ indicators:
     frequency: monthly
     code: LNS12300060
     unit: percent
+    description: "Share of 25-54 year-olds who are employed. Avoids demographic distortions of the unemployment rate (aging, school enrollment). Pre-pandemic peak was ~80.5%."
 
   - id: avg_hourly_earnings
     name: Average Hourly Earnings (Private)
@@ -108,6 +120,7 @@ indicators:
     frequency: monthly
     code: CES0500000003
     unit: usd
+    description: "Average hourly wage for private-sector workers. Year-over-year growth above 3.5% can signal wage-push inflation pressures."
 
   - id: avg_weekly_hours_mfg
     name: Average Weekly Hours (Manufacturing)
@@ -116,6 +129,7 @@ indicators:
     frequency: monthly
     code: AWHMAN
     unit: hours
+    description: "Average hours worked per week in manufacturing. A leading indicator — firms adjust hours before hiring/firing. Declining hours foreshadow layoffs."
 
   # ══════════════════════════════════════════════════════════════════════
   # INFLATION & PRICES — Consumer, producer, and market-implied
@@ -127,6 +141,7 @@ indicators:
     frequency: monthly
     code: CPIAUCSL
     unit: index
+    description: "Consumer Price Index for all urban consumers. The headline inflation measure. The Fed targets 2% annual growth (measured by PCE, but CPI is more widely followed)."
 
   - id: core_pce
     name: Core PCE Price Index
@@ -135,6 +150,7 @@ indicators:
     frequency: monthly
     code: PCEPILFE
     unit: index
+    description: "Personal Consumption Expenditures price index excluding food and energy. The Fed's preferred inflation measure for policy decisions. Target: 2% annual rate."
 
   - id: ppi_all
     name: PPI All Commodities
@@ -143,6 +159,7 @@ indicators:
     frequency: monthly
     code: PPIACO
     unit: index
+    description: "Producer Price Index for all commodities. Measures wholesale/producer-level prices. PPI changes often flow through to consumer prices with a lag."
 
   - id: breakeven_5y
     name: 5-Year Breakeven Inflation Rate
@@ -151,6 +168,7 @@ indicators:
     frequency: daily
     code: T5YIE
     unit: percent
+    description: "Market-implied average inflation over the next 5 years, derived from TIPS vs nominal Treasury spreads. Reflects bond market inflation expectations."
 
   # ══════════════════════════════════════════════════════════════════════
   # RATES & YIELD CURVE — Policy rate, Treasury curve, spreads
@@ -162,6 +180,7 @@ indicators:
     frequency: monthly
     code: FEDFUNDS
     unit: percent
+    description: "The interest rate at which banks lend reserves overnight. The Fed's primary monetary policy tool. Higher rates tighten financial conditions and slow the economy."
 
   - id: sofr
     name: Secured Overnight Financing Rate
@@ -170,6 +189,7 @@ indicators:
     frequency: daily
     code: SOFR
     unit: percent
+    description: "Benchmark rate for overnight Treasury repo transactions. Replaced LIBOR as the reference rate for trillions in financial contracts."
 
   - id: treasury_2y
     name: 2-Year Treasury Yield
@@ -178,6 +198,7 @@ indicators:
     frequency: daily
     code: DGS2
     unit: percent
+    description: "Yield on 2-year US government bonds. Closely tracks Fed policy expectations. Rapid moves signal shifting rate outlook."
 
   - id: treasury_5y
     name: 5-Year Treasury Yield
@@ -186,6 +207,7 @@ indicators:
     frequency: daily
     code: DGS5
     unit: percent
+    description: "Yield on 5-year US government bonds. The belly of the curve, sensitive to both near-term policy and medium-term growth/inflation expectations."
 
   - id: treasury_10y
     name: 10-Year Treasury Yield
@@ -194,6 +216,7 @@ indicators:
     frequency: daily
     code: DGS10
     unit: percent
+    description: "Yield on 10-year US government bonds. The benchmark risk-free rate that influences mortgages, corporate borrowing, and equity valuations."
 
   - id: treasury_30y
     name: 30-Year Treasury Yield
@@ -202,6 +225,7 @@ indicators:
     frequency: daily
     code: DGS30
     unit: percent
+    description: "Yield on 30-year US government bonds. Reflects long-run growth and inflation expectations plus term premium."
 
   - id: spread_10y_2y
     name: 10Y-2Y Treasury Yield Spread
@@ -210,6 +234,7 @@ indicators:
     frequency: daily
     code: T10Y2Y
     unit: percent
+    description: "Difference between 10-year and 2-year Treasury yields. The most-watched curve slope. Inversion (negative) has preceded every US recession since 1970."
 
   - id: spread_10y_3m
     name: 10Y-3M Treasury Yield Spread
@@ -218,6 +243,7 @@ indicators:
     frequency: daily
     code: T10Y3M
     unit: percent
+    description: "Difference between 10-year Treasury and 3-month T-bill yields. Research (Estrella-Mishkin) shows this is the most reliable recession predictor among curve measures."
 
   - id: mortgage_30y
     name: 30-Year Fixed Mortgage Rate
@@ -226,6 +252,7 @@ indicators:
     frequency: weekly
     code: MORTGAGE30US
     unit: percent
+    description: "Average rate on a 30-year fixed-rate mortgage. The primary driver of housing affordability and refinancing activity."
 
   # ══════════════════════════════════════════════════════════════════════
   # CREDIT CONDITIONS — Spreads, financial conditions, stress
@@ -237,6 +264,7 @@ indicators:
     frequency: daily
     code: BAA10Y
     unit: percent
+    description: "Spread between BAA-rated corporate bonds and 10-year Treasuries. Measures credit risk premium. Widening spreads signal rising default fears and risk aversion."
 
   - id: hy_oas
     name: ICE BofA US High Yield OAS
@@ -245,6 +273,7 @@ indicators:
     frequency: daily
     code: BAMLH0A0HYM2
     unit: percent
+    description: "Option-adjusted spread on high-yield (junk) corporate bonds. Key stress indicator — above 500bps signals distress, above 800bps indicates crisis conditions."
 
   - id: ig_oas
     name: ICE BofA US Investment Grade OAS
@@ -253,6 +282,7 @@ indicators:
     frequency: daily
     code: BAMLC0A0CM
     unit: percent
+    description: "Option-adjusted spread on investment-grade corporate bonds. Widens during risk-off episodes. Tighter spreads indicate healthy credit appetite."
 
   - id: nfci
     name: Chicago Fed National Financial Conditions Index
@@ -261,6 +291,7 @@ indicators:
     frequency: weekly
     code: NFCI
     unit: index
+    description: "Weighted average of 105 financial indicators. Zero = average conditions. Positive = tighter than average (restrictive); negative = looser (accommodative)."
 
   - id: stlfsi
     name: St. Louis Fed Financial Stress Index
@@ -269,6 +300,7 @@ indicators:
     frequency: weekly
     code: STLFSI4
     unit: index
+    description: "PCA-based composite of 18 financial market variables. Zero = normal stress. Values above 1.5 historically coincide with financial crises."
 
   - id: m2
     name: M2 Money Supply
@@ -277,6 +309,7 @@ indicators:
     frequency: weekly
     code: WM2NS
     unit: billions_usd
+    description: "Broad money supply including cash, checking deposits, savings, and money market funds. Rapid M2 growth can foreshadow inflation; contraction signals tightening."
 
   # ══════════════════════════════════════════════════════════════════════
   # HOUSING — Starts, permits, prices, mortgage
@@ -288,6 +321,7 @@ indicators:
     frequency: monthly
     code: HOUST
     unit: thousands
+    description: "Number of new residential construction projects begun. A leading indicator — housing is rate-sensitive and among the first sectors to respond to monetary policy."
 
   - id: building_permits
     name: New Private Housing Building Permits
@@ -296,6 +330,7 @@ indicators:
     frequency: monthly
     code: PERMIT
     unit: thousands
+    description: "Number of permits issued for new housing units. Leads housing starts by 1-2 months and is a component of the Conference Board Leading Economic Index."
 
   - id: case_shiller
     name: Case-Shiller National Home Price Index
@@ -304,6 +339,7 @@ indicators:
     frequency: monthly
     code: CSUSHPISA
     unit: index
+    description: "Repeat-sales home price index covering 9 US Census divisions. The benchmark measure of US home price appreciation. Published with a 2-month lag."
 
   # ══════════════════════════════════════════════════════════════════════
   # LEADING & COMPOSITE — Forward-looking composite indicators
@@ -315,6 +351,7 @@ indicators:
     frequency: monthly
     code: USSLIND
     unit: index
+    description: "Composite of 10 leading indicators (claims, permits, S&P 500, credit, etc.). Six consecutive monthly declines historically signal recession within 6-12 months."
 
   - id: sahm_rule
     name: Sahm Rule Real-Time Recession Indicator
@@ -323,6 +360,7 @@ indicators:
     frequency: monthly
     code: SAHMREALTIME
     unit: percent
+    description: "3-month moving average of unemployment rate minus its 12-month low. Readings above 0.50 have coincided with every US recession since 1970."
 
   - id: recession_prob
     name: Smoothed US Recession Probability
@@ -331,6 +369,7 @@ indicators:
     frequency: monthly
     code: RECPROUSM156N
     unit: percent
+    description: "Model-based recession probability from Chauvet-Piger (Markov-switching). Published with a delay. Values above 80% confirm recession dating."
 
   - id: consumer_sentiment
     name: U. Michigan Consumer Sentiment
@@ -339,6 +378,7 @@ indicators:
     frequency: monthly
     code: UMCSENT
     unit: index
+    description: "Survey-based measure of consumer confidence about the economy. Leading indicator of consumer spending. Sharp drops can foreshadow pullbacks in discretionary spending."
 
   - id: ism_mfg_pmi
     name: ISM Manufacturing New Orders
@@ -347,6 +387,7 @@ indicators:
     frequency: monthly
     code: NAPMNOI
     unit: percent
+    description: "New orders component of the ISM Manufacturing PMI. Above 50 = expansion, below 50 = contraction. One of the most timely forward-looking indicators."
 
   - id: trade_balance
     name: US Trade Balance (Goods & Services)
@@ -355,6 +396,7 @@ indicators:
     frequency: monthly
     code: BOPGSTB
     unit: millions_usd
+    description: "Net exports of goods and services. Persistent deficits reflect strong domestic demand relative to foreign demand. Large swings affect GDP calculations."
 
   # ══════════════════════════════════════════════════════════════════════
   # MARKETS — Indices, commodities, FX, crypto, volatility
@@ -366,6 +408,7 @@ indicators:
     frequency: daily
     code: SPY
     unit: usd
+    description: "Tracks the S&P 500 index — 500 largest US public companies by market cap. The benchmark equity gauge and a component of leading economic indices."
 
   - id: nasdaq100
     name: Nasdaq 100 ETF (QQQ)
@@ -374,6 +417,7 @@ indicators:
     frequency: daily
     code: QQQ
     unit: usd
+    description: "Tracks the Nasdaq 100 — 100 largest non-financial Nasdaq stocks, heavily weighted toward technology. A barometer of growth/tech sentiment."
 
   - id: russell2000
     name: Russell 2000 ETF (IWM)
@@ -382,6 +426,7 @@ indicators:
     frequency: daily
     code: IWM
     unit: usd
+    description: "Tracks the Russell 2000 small-cap index. Small caps are more domestically focused and rate-sensitive. Underperformance vs large caps signals risk aversion."
 
   - id: vix
     name: CBOE Volatility Index
@@ -390,6 +435,7 @@ indicators:
     frequency: daily
     code: "^VIX"
     unit: index
+    description: "Implied volatility of S&P 500 options over the next 30 days. Known as the 'fear gauge.' Below 15 = complacent, 20-30 = elevated, above 30 = high fear."
 
   - id: vix3m
     name: CBOE 3-Month Volatility Index
@@ -398,6 +444,7 @@ indicators:
     frequency: daily
     code: "^VIX3M"
     unit: index
+    description: "Implied volatility of S&P 500 options over the next 3 months. When VIX > VIX3M (inverted term structure), it signals acute near-term fear."
 
   - id: skew
     name: CBOE SKEW Index
@@ -406,6 +453,7 @@ indicators:
     frequency: daily
     code: "^SKEW"
     unit: index
+    description: "Measures the perceived tail risk in S&P 500 returns via out-of-money put pricing. Higher values = greater market concern about extreme downside moves."
 
   - id: crude_oil
     name: WTI Crude Oil Futures
@@ -414,6 +462,7 @@ indicators:
     frequency: daily
     code: CL=F
     unit: usd
+    description: "Front-month West Texas Intermediate crude oil futures. Key input cost for the economy. Sharp rises act as a tax on consumers and can trigger inflation."
 
   - id: gold
     name: Gold Futures
@@ -422,6 +471,7 @@ indicators:
     frequency: daily
     code: GC=F
     unit: usd
+    description: "Front-month gold futures. Traditional safe-haven asset. Tends to rise during geopolitical uncertainty, real rate declines, and loss of confidence in fiat currencies."
 
   - id: dxy
     name: US Dollar Index
@@ -430,6 +480,7 @@ indicators:
     frequency: daily
     code: DX-Y.NYB
     unit: index
+    description: "Trade-weighted index of the USD against 6 major currencies (EUR, JPY, GBP, CAD, SEK, CHF). A strong dollar tightens global financial conditions."
 
   - id: btc
     name: Bitcoin
@@ -438,6 +489,7 @@ indicators:
     frequency: daily
     code: BTC-USD
     unit: usd
+    description: "Bitcoin price in USD. Increasingly correlated with risk assets. Can serve as a gauge of speculative appetite and global liquidity conditions."
 
   - id: eth
     name: Ethereum
@@ -446,6 +498,7 @@ indicators:
     frequency: daily
     code: ETH-USD
     unit: usd
+    description: "Ethereum price in USD. The leading smart-contract platform. ETH/BTC ratio is watched as a proxy for crypto risk appetite."
 
   - id: hy_bond
     name: High Yield Corporate Bond ETF
@@ -454,6 +507,7 @@ indicators:
     frequency: daily
     code: HYG
     unit: usd
+    description: "Tracks the iBoxx USD Liquid High Yield Index. Price declines signal credit stress and risk-off sentiment. Often leads equity weakness."
 
   # ── Sector ETFs ──
   - id: xlf
@@ -463,6 +517,7 @@ indicators:
     frequency: daily
     code: XLF
     unit: usd
+    description: "Financial sector ETF (banks, insurance, capital markets). Sensitive to yield curve slope, credit conditions, and regulatory environment."
 
   - id: xlk
     name: Technology Select SPDR
@@ -471,6 +526,7 @@ indicators:
     frequency: daily
     code: XLK
     unit: usd
+    description: "Technology sector ETF. Largest S&P 500 sector weight. Sensitive to long-duration rate expectations and growth/innovation sentiment."
 
   - id: xle
     name: Energy Select SPDR
@@ -479,6 +535,7 @@ indicators:
     frequency: daily
     code: XLE
     unit: usd
+    description: "Energy sector ETF (oil, gas, energy equipment). Highly correlated with crude oil prices and global demand expectations."
 
   - id: xlv
     name: Health Care Select SPDR
@@ -487,6 +544,7 @@ indicators:
     frequency: daily
     code: XLV
     unit: usd
+    description: "Health care sector ETF (pharma, biotech, managed care). Traditionally defensive — tends to outperform during economic downturns."
 
   - id: xli
     name: Industrial Select SPDR
@@ -495,6 +553,7 @@ indicators:
     frequency: daily
     code: XLI
     unit: usd
+    description: "Industrial sector ETF (aerospace, machinery, transports). Cyclical — tracks global manufacturing and trade activity closely."
 
   - id: xlre
     name: Real Estate Select SPDR
@@ -503,6 +562,7 @@ indicators:
     frequency: daily
     code: XLRE
     unit: usd
+    description: "Real estate sector ETF (REITs). Highly rate-sensitive — rising rates increase borrowing costs and compress property valuations."
 
   - id: xly
     name: Consumer Discretionary SPDR
@@ -511,6 +571,7 @@ indicators:
     frequency: daily
     code: XLY
     unit: usd
+    description: "Consumer discretionary ETF (retail, autos, leisure). Cyclical — performance reflects consumer confidence and disposable income trends."
 
   - id: xlp
     name: Consumer Staples SPDR
@@ -519,3 +580,4 @@ indicators:
     frequency: daily
     code: XLP
     unit: usd
+    description: "Consumer staples ETF (food, beverages, household products). Defensive — stable demand regardless of economic conditions. Outperforms in downturns."
