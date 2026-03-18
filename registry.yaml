@@ -381,13 +381,13 @@ indicators:
     description: "Survey-based measure of consumer confidence about the economy. Leading indicator of consumer spending. Sharp drops can foreshadow pullbacks in discretionary spending."
 
   - id: ism_mfg_pmi
-    name: ISM Manufacturing New Orders
+    name: ISM Manufacturing PMI
     category: leading_composite
     source: fred
     frequency: monthly
-    code: NAPMNOI
-    unit: percent
-    description: "New orders component of the ISM Manufacturing PMI. Above 50 = expansion, below 50 = contraction. One of the most timely forward-looking indicators."
+    code: NAPM
+    unit: index
+    description: "ISM Manufacturing Purchasing Managers Index (composite). Above 50 = expansion, below 50 = contraction. One of the most timely forward-looking indicators."
 
   - id: trade_balance
     name: US Trade Balance (Goods & Services)
@@ -474,13 +474,13 @@ indicators:
     description: "Front-month gold futures. Traditional safe-haven asset. Tends to rise during geopolitical uncertainty, real rate declines, and loss of confidence in fiat currencies."
 
   - id: dxy
-    name: US Dollar Index
+    name: Trade Weighted US Dollar Index
     category: markets
-    source: yfinance
+    source: fred
     frequency: daily
-    code: DX-Y.NYB
+    code: DTWEXBGS
     unit: index
-    description: "Trade-weighted index of the USD against 6 major currencies (EUR, JPY, GBP, CAD, SEK, CHF). A strong dollar tightens global financial conditions."
+    description: "Trade-weighted index of the USD against a broad group of currencies (Goods and Services). A strong dollar tightens global financial conditions and hurts US exporters."
 
   - id: btc
     name: Bitcoin
